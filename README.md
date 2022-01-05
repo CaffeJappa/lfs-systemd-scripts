@@ -69,12 +69,12 @@ export LFS=/mnt/lfs
 # mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
 
 # for i in bin lib sbin; do
-   ln -sv usr/$i $LFS/$i
-  done
+ln -sv usr/$i $LFS/$i
+done
 
 # case $(uname -m) in
-   x86_64) mkdir -pv $LFS/lib64 ;;
-  esac
+x86_64) mkdir -pv $LFS/lib64 ;;
+esac
 
 # mkdir -pv $LFS/tools
 ```
@@ -102,24 +102,24 @@ export LFS=/mnt/lfs
 > 1.4. Create a .bash_profile file.
 ```
 $ cat > ~/.bash_profile << "EOF"
-  exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
-  EOF
+exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
+EOF
 ```
 
 > 1.4.1 Create a .bashrc file.
 ```
 $ cat > ~/.bashrc << "EOF"
-  set +h
-  umask 022
-  LFS=/mnt/lfs
-  LC_ALL=POSIX
-  LFS_TGT=$(uname -m)-lfs-linux-gnu
-  PATH=/usr/bin
-  if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
-  PATH=$LFS/tools/bin:$PATH
-  CONFIG_SITE=$LFS/usr/share/config.site
-  export LFS LC_ALL LFS_TGT PATH CONFIG_SITE
-  EOF
+set +h
+umask 022
+LFS=/mnt/lfs
+LC_ALL=POSIX
+LFS_TGT=$(uname -m)-lfs-linux-gnu
+PATH=/usr/bin
+if [ ! -L /bin ]; then PATH=/bin:$PATH; fi
+PATH=$LFS/tools/bin:$PATH
+CONFIG_SITE=$LFS/usr/share/config.site
+export LFS LC_ALL LFS_TGT PATH CONFIG_SITE
+EOF
 
 $ source ~/.bashrc
 ```
@@ -156,18 +156,18 @@ $ exit
 # mount -vt sysfs sysfs $LFS/sys
 # mount -vt tmpfs tmpfs $LFS/run
 # if [ -h $LFS/dev/shm ]; then
-    mkdir -pv $LFS/$(readlink $LFS/dev/shm)
-  fi
+mkdir -pv $LFS/$(readlink $LFS/dev/shm)
+fi
 ```
 
 > 1.2. Enter the chroot environment.
 ```
 # chroot "$LFS" /usr/bin/env -i   \
-      HOME=/root                  \
-      TERM="$TERM"                \
-      PS1='(lfs chroot) \u:\w\$ ' \
-      PATH=/usr/bin:/usr/sbin     \
-      /bin/bash --login +h
+HOME=/root                  \
+TERM="$TERM"                \
+PS1='(lfs chroot) \u:\w\$ ' \
+PATH=/usr/bin:/usr/sbin     \
+/bin/bash --login +h
 ```
 * Notice that you'll have no name, and that's normal. You'll be already running as root.
 
@@ -194,46 +194,46 @@ $ exit
 # ln -sv /proc/self/mounts /etc/mtab
 
 # cat > /etc/hosts << EOF
-  127.0.0.1  localhost $(hostname)
-  ::1        localhost
-  EOF
+127.0.0.1  localhost $(hostname)
+::1        localhost
+EOF
 
 # cat > /etc/passwd << "EOF"
-  root:x:0:0:root:/root:/bin/bash
-  bin:x:1:1:bin:/dev/null:/bin/false
-  daemon:x:6:6:Daemon User:/dev/null:/bin/false
-  messagebus:x:18:18:D-Bus Message Daemon User:/run/dbus:/bin/false
-  uuidd:x:80:80:UUID Generation Daemon User:/dev/null:/bin/false
-  nobody:x:99:99:Unprivileged User:/dev/null:/bin/false
-  EOF
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/dev/null:/bin/false
+daemon:x:6:6:Daemon User:/dev/null:/bin/false
+messagebus:x:18:18:D-Bus Message Daemon User:/run/dbus:/bin/false
+uuidd:x:80:80:UUID Generation Daemon User:/dev/null:/bin/false
+nobody:x:99:99:Unprivileged User:/dev/null:/bin/false
+EOF
 
 # cat > /etc/group << "EOF"
-  root:x:0:
-  bin:x:1:daemon
-  sys:x:2:
-  kmem:x:3:
-  tape:x:4:
-  tty:x:5:
-  daemon:x:6:
-  floppy:x:7:
-  disk:x:8:
-  lp:x:9:
-  dialout:x:10:
-  audio:x:11:
-  video:x:12:
-  utmp:x:13:
-  usb:x:14:
-  cdrom:x:15:
-  adm:x:16:
-  messagebus:x:18:
-  input:x:24:
-  mail:x:34:
-  kvm:x:61:
-  uuidd:x:80:
-  wheel:x:97:
-  nogroup:x:99:
-  users:x:999:
-  EOF
+root:x:0:
+bin:x:1:daemon
+sys:x:2:
+kmem:x:3:
+tape:x:4:
+tty:x:5:
+daemon:x:6:
+floppy:x:7:
+disk:x:8:
+lp:x:9:
+dialout:x:10:
+audio:x:11:
+video:x:12:
+utmp:x:13:
+usb:x:14:
+cdrom:x:15:
+adm:x:16:
+messagebus:x:18:
+input:x:24:
+mail:x:34:
+kvm:x:61:
+uuidd:x:80:
+wheel:x:97:
+nogroup:x:99:
+users:x:999:
+EOF
 
 # touch /var/log/{btmp,lastlog,faillog,wtmp}
 # chgrp -v utmp /var/log/lastlog
@@ -273,10 +273,10 @@ $ exit
 # logout
 
 # chroot "$LFS" /usr/bin/env -i          \
-      HOME=/root TERM="$TERM"            \
-      PS1='(lfs chroot) \u:\w\$ '        \
-      PATH=/usr/bin:/usr/sbin            \
-      /bin/bash --login
+HOME=/root TERM="$TERM"            \
+PS1='(lfs chroot) \u:\w\$ '        \
+PATH=/usr/bin:/usr/sbin            \
+/bin/bash --login
 ```
 * Now you have a name! ;)
 ## The End
@@ -298,20 +298,20 @@ $ exit
 # logout
 # rm $LFS/etc/fstab
 # cat > $LFS/etc/fstab << "EOF"
-  # Begin /etc/fstab
-  
-  # file system  mount-point  type     options             dump  fsck
-  #                                                              order
-  
-  /dev/sda1      /boot/efi             vfat     rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro            0     2
-  /dev/sda2      /            ext4     defaults            1     1     
-  proc           /proc        proc     nosuid,noexec,nodev 0     0
-  sysfs          /sys         sysfs    nosuid,noexec,nodev 0     0
-  devpts         /dev/pts     devpts   gid=5,mode=620      0     0
-  tmpfs          /run         tmpfs    defaults            0     0
-  devtmpfs       /dev         devtmpfs mode=0755,nosuid    0     0
-  
-  # End /etc/fstab
-  EOF
+# Begin /etc/fstab
+
+# file system  mount-point  type     options             dump  fsck
+#                                                              order
+
+/dev/sda1      /boot/efi             vfat     rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro            0     2
+/dev/sda2      /            ext4     defaults            1     1     
+proc           /proc        proc     nosuid,noexec,nodev 0     0
+sysfs          /sys         sysfs    nosuid,noexec,nodev 0     0
+devpts         /dev/pts     devpts   gid=5,mode=620      0     0
+tmpfs          /run         tmpfs    defaults            0     0
+devtmpfs       /dev         devtmpfs mode=0755,nosuid    0     0
+
+# End /etc/fstab
+EOF
 ```
 Congratulations, you did it! Now you may use the system for whatever you want. It will be bootable (if you configured it to be so) and fully functional. Enjoy!
