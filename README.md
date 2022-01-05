@@ -278,6 +278,6 @@ $ exit
 ```
 # sh /lfs-final.sh | tee /lfs-final.log
 ```
-* GRUB is not configured to be installed in the script. If you're a MBR user, edit the file and uncomment the GRUB (10.4 header) lines (and configure it to your partitions). A UEFI Grub script will be released soon.
+* GRUB is not configured to be installed in the script. If you're a MBR user, edit the file and uncomment the GRUB (10.4 header) lines (and configure it to your partitions), you don't need to do this if doing on a real HD/SSD, just open your terminal and run `# grub-mkconfig -o /boot/grub/grub.cfg`. A UEFI Grub script will be released soon.
 
 Congratulations, you did it! Now you may use the system for whatever you want. It will be bootable (if you configured it to be so) and fully functional. Enjoy!
