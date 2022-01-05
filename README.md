@@ -296,21 +296,22 @@ $ exit
 > 1.0.2. Edit fstab (EFI).
 ```
 # logout
-# nano $LFS/etc/fstab
-
-# Begin /etc/fstab
-
-# file system  mount-point  type     options             dump  fsck
-#                                                              order
-
-/dev/sda1      /            vfat     rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro            0     2
-/dev/sda2      /boot            ext4     defaults            1     1     
-proc           /proc        proc     nosuid,noexec,nodev 0     0
-sysfs          /sys         sysfs    nosuid,noexec,nodev 0     0
-devpts         /dev/pts     devpts   gid=5,mode=620      0     0
-tmpfs          /run         tmpfs    defaults            0     0
-devtmpfs       /dev         devtmpfs mode=0755,nosuid    0     0
-
-# End /etc/fstab
+# rm $LFS/etc/fstab
+# cat > $LFS/etc/fstab << "EOF"
+  # Begin /etc/fstab
+  
+  # file system  mount-point  type     options             dump  fsck
+  #                                                              order
+  
+  /dev/sda1      /            vfat     rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro            0     2
+  /dev/sda2      /boot            ext4     defaults            1     1     
+  proc           /proc        proc     nosuid,noexec,nodev 0     0
+  sysfs          /sys         sysfs    nosuid,noexec,nodev 0     0
+  devpts         /dev/pts     devpts   gid=5,mode=620      0     0
+  tmpfs          /run         tmpfs    defaults            0     0
+  devtmpfs       /dev         devtmpfs mode=0755,nosuid    0     0
+  
+  # End /etc/fstab
+  EOF
 ```
 Congratulations, you did it! Now you may use the system for whatever you want. It will be bootable (if you configured it to be so) and fully functional. Enjoy!
