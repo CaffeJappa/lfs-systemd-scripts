@@ -59,8 +59,8 @@ cp -v ../nscd/nscd.conf /etc/nscd.conf
 mkdir -pv /var/cache/nscd
 mkdir -pv /usr/lib/locale
 localedef -i POSIX -f UTF-8 C.UTF-8 2> /dev/null || true
-localedef -i pt_BR -f ISO-8859-1 pt_BR
-localedef -i pt_BR -f UTF-8 pt_BR.UTF-8
+localedef -i en_US -f ISO-8859-1 en_US
+localedef -i en_US -f UTF-8 en_US.UTF-8
 cat > /etc/nsswitch.conf << "EOF"
 # Begin /etc/nsswitch.conf
 
@@ -872,7 +872,7 @@ sed -i -e 's/GROUP="render"/GROUP="video"/' \
 mkdir -p build
 cd       build
 
-LANG=pt_BR.UTF-8                    \
+LANG=en_US.UTF-8                    \
 meson --prefix=/usr                 \
       --sysconfdir=/etc             \
       --localstatedir=/var          \
@@ -891,8 +891,8 @@ meson --prefix=/usr                 \
       -Dmode=release                \
       -Ddocdir=/usr/share/doc/systemd-249 \
       ..
-LANG=pt_BR.UTF-8 ninja
-LANG=pt_BR.UTF-8 ninja install
+LANG=en_US.UTF-8 ninja
+LANG=en_US.UTF-8 ninja install
 tar -xf ../../systemd-man-pages-249.tar.xz --strip-components=1 -C /usr/share/man
 rm -rf /usr/lib/pam.d
 systemd-machine-id-setup

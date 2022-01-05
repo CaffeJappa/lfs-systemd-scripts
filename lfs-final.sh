@@ -87,14 +87,14 @@ EOF
 
 # 9.6. Configuring the Linux Console
 cat > /etc/vconsole.conf << "EOF"
-KEYMAP=br-abnt2
+KEYMAP=en
 EOF
 
 # 9.7. The Bash Shell Startup Files
 cat > /etc/profile << "EOF"
 # Begin /etc/profile
 
-export LANG=pt_BR.UTF-8
+export LANG=en_US.UTF-8
 
 # End /etc/profile
 EOF
