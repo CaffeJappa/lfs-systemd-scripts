@@ -270,12 +270,13 @@ $ exit
       PATH=/usr/bin:/usr/sbin            \
       /bin/bash --login
 ```
+* Now you have a name! ;)
 ## The End
 
 > 1.0. Run the final script to configure the rest of the system.
 
 ```
-sh /lfs-final.sh | tee /lfs-final.log
+# sh /lfs-final.sh | tee /lfs-final.log
 ```
 * GRUB is not configured to be installed in the script. If you're an MBR user, edit the file and uncomment the GRUB (10.4 header) lines (and configure it to your partitions). A UEFI Grub script will be released soon.
 
