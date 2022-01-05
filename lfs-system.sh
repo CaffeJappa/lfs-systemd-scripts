@@ -50,7 +50,7 @@ echo "rootsbindir=/usr/sbin" > configparms
              --enable-stack-protector=strong          \
              --with-headers=/usr/include              \
              libc_cv_slibdir=/usr/lib
-make
+make -j4
 touch /etc/ld.so.conf
 sed '/test-installation/s@$(PERL)@echo not running@' -i ../Makefile
 make install
@@ -59,8 +59,8 @@ cp -v ../nscd/nscd.conf /etc/nscd.conf
 mkdir -pv /var/cache/nscd
 mkdir -pv /usr/lib/locale
 localedef -i POSIX -f UTF-8 C.UTF-8 2> /dev/null || true
-localedef -i en_US -f ISO-8859-1 en_US
-localedef -i en_US -f UTF-8 en_US.UTF-8
+localedef -i pt_BR -f ISO-8859-1 pt_BR
+localedef -i pt_BR -f UTF-8 pt_BR.UTF-8
 cat > /etc/nsswitch.conf << "EOF"
 # Begin /etc/nsswitch.conf
 
@@ -93,7 +93,7 @@ done
 cp -v zone.tab zone1970.tab iso3166.tab $ZONEINFO
 zic -d $ZONEINFO -p America/New_York
 unset ZONEINFO
-ln -sfv /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+ln -sfv /usr/share/zoneinfo/America/Montevideo /etc/localtime
 cat > /etc/ld.so.conf << "EOF"
 # Begin /etc/ld.so.conf
 /usr/local/lib
@@ -111,7 +111,7 @@ finish
 # 8.6. Zlib-1.2.11
 begin zlib-1.2.11 tar.xz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 rm -fv /usr/lib/libz.a
 finish
@@ -121,9 +121,9 @@ begin bzip2-1.0.8 tar.gz
 patch -Np1 -i ../bzip2-1.0.8-install_docs-1.patch
 sed -i 's@\(ln -s -f \)$(PREFIX)/bin/@\1@' Makefile
 sed -i "s@(PREFIX)/man@(PREFIX)/share/man@g" Makefile
-make -f Makefile-libbz2_so
+make -j4 -f Makefile-libbz2_so
 make clean
-make
+make -j4
 make PREFIX=/usr install
 cp -av libbz2.so.* /usr/lib
 ln -sv libbz2.so.1.0.8 /usr/lib/libbz2.so
@@ -139,13 +139,13 @@ begin xz-5.2.5 tar.xz
 ./configure --prefix=/usr    \
             --disable-static \
             --docdir=/usr/share/doc/xz-5.2.5
-make
+make -j4
 make install
 finish
 
 # 8.9. Zstd-1.5.0
 begin zstd-1.5.0 tar.gz
-make
+make -j4
 make prefix=/usr install
 rm -v /usr/lib/libzstd.a
 finish
@@ -165,21 +165,21 @@ sed -i '/{OLDSUFF}/c:' support/shlib-install
             --disable-static \
             --with-curses    \
             --docdir=/usr/share/doc/readline-8.1
-make SHLIB_LIBS="-lncursesw"
+make -j4 SHLIB_LIBS="-lncursesw"
 make SHLIB_LIBS="-lncursesw" install
 finish
 
 # 8.12. M4-1.4.19
 begin m4-1.4.19 tar.xz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 finish
 
 # 8.13. Bc-5.0.0
 begin bc-5.0.0 tar.xz
 CC=gcc ./configure --prefix=/usr -G -O3
-make
+make -j4
 make install
 finish
 
@@ -188,7 +188,7 @@ begin flex-2.6.4 tar.gz
 ./configure --prefix=/usr \
             --docdir=/usr/share/doc/flex-2.6.4 \
             --disable-static
-make
+make -j4
 make install
 ln -sv flex /usr/bin/lex
 finish
@@ -202,7 +202,7 @@ cd unix
 ./configure --prefix=/usr           \
             --mandir=/usr/share/man \
             $([ "$(uname -m)" = x86_64 ] && echo --enable-64bit)
-make
+make -j4
 
 sed -e "s|$SRCDIR/unix|/usr/lib|" \
     -e "s|$SRCDIR|/usr/include|"  \
@@ -234,7 +234,7 @@ begin expect5.45.4 tar.gz
             --enable-shared         \
             --mandir=/usr/share/man \
             --with-tclinclude=/usr/include
-make
+make -j4
 make install
 ln -svf expect5.45.4/libexpect5.45.4.so /usr/lib
 finish
@@ -267,7 +267,7 @@ cd       build
              --disable-werror    \
              --enable-64-bit-bfd \
              --with-system-zlib
-make tooldir=/usr
+make -j4 tooldir=/usr
 make tooldir=/usr install -j1
 rm -fv /usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes}.a
 finish
@@ -278,8 +278,8 @@ begin gmp-6.2.1 tar.xz
             --enable-cxx     \
             --disable-static \
             --docdir=/usr/share/doc/gmp-6.2.1
-make
-make html
+make -j4
+make -j4 html
 make install
 make install-html
 finish
@@ -290,8 +290,8 @@ begin mpfr-4.1.0 tar.xz
             --disable-static     \
             --enable-thread-safe \
             --docdir=/usr/share/doc/mpfr-4.1.0
-make
-make html
+make -j4
+make -j4 html
 make install
 make install-html
 finish
@@ -301,8 +301,8 @@ begin mpc-1.2.1 tar.gz
 ./configure --prefix=/usr    \
             --disable-static \
             --docdir=/usr/share/doc/mpc-1.2.1
-make
-make html
+make -j4
+make -j4 html
 make install
 make install-html
 finish
@@ -313,7 +313,7 @@ begin attr-2.5.1 tar.gz
             --disable-static  \
             --sysconfdir=/etc \
             --docdir=/usr/share/doc/attr-2.5.1
-make
+make -j4
 make install
 finish
 
@@ -322,14 +322,14 @@ begin acl-2.3.1 tar.xz
 ./configure --prefix=/usr         \
             --disable-static      \
             --docdir=/usr/share/doc/acl-2.3.1
-make
+make -j4
 make install
 finish
 
 # 8.24. Libcap-2.53
 begin libcap-2.53 tar.xz
 sed -i '/install -m.*STA/d' libcap/Makefile
-make prefix=/usr lib=lib
+make -j4 prefix=/usr lib=lib
 make prefix=/usr lib=lib install
 chmod -v 755 /usr/lib/lib{cap,psx}.so.2.53
 finish
@@ -348,7 +348,7 @@ sed -e "224s/rounds/min_rounds/" -i libmisc/salt.c
 touch /usr/bin/passwd
 ./configure --sysconfdir=/etc \
             --with-group-name-max-length=32
-make
+make -j4
 make exec_prefix=/usr install
 make -C man install-man
 mkdir -p /etc/default
@@ -376,7 +376,7 @@ cd       build
              --disable-multilib       \
              --disable-bootstrap      \
              --with-system-zlib
-make
+make -j4
 make install
 rm -rf /usr/lib/gcc/$(gcc -dumpmachine)/11.2.0/include-fixed/bits/
 chown -v -R root:root \
@@ -403,7 +403,7 @@ begin pkg-config-0.29.2 tar.gz
             --with-internal-glib       \
             --disable-host-tool        \
             --docdir=/usr/share/doc/pkg-config-0.29.2
-make
+make -j4
 make install
 finish
 
@@ -416,7 +416,7 @@ begin ncurses-6.2 tar.gz
             --without-normal        \
             --enable-pc-files       \
             --enable-widec
-make
+make -j4
 make install
 for lib in ncurses form panel menu ; do
     rm -vf                    /usr/lib/lib${lib}.so
@@ -434,8 +434,8 @@ finish
 # 8.29. Sed-4.8
 begin sed-4.8 tar.xz
 ./configure --prefix=/usr
-make
-make html
+make -j4
+make -j4 html
 make install
 install -d -m755           /usr/share/doc/sed-4.8
 install -m644 doc/sed.html /usr/share/doc/sed-4.8
@@ -444,7 +444,7 @@ finish
 # 8.30. Psmisc-23.4
 begin psmisc-23.4 tar.xz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 finish
 
@@ -453,7 +453,7 @@ begin gettext-0.21 tar.xz
 ./configure --prefix=/usr    \
             --disable-static \
             --docdir=/usr/share/doc/gettext-0.21
-make
+make -j4
 make install
 chmod -v 0755 /usr/lib/preloadable_libintl.so
 finish
@@ -461,14 +461,14 @@ finish
 # 8.32. Bison-3.7.6
 begin bison-3.7.6 tar.xz
 ./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.7.6
-make
+make -j4
 make install
 finish
 
 # 8.33. Grep-3.7
 begin grep-3.7 tar.xz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 finish
 
@@ -478,14 +478,14 @@ begin bash-5.1.8 tar.gz
             --docdir=/usr/share/doc/bash-5.1.8 \
             --without-bash-malloc              \
             --with-installed-readline
-make
+make -j4
 make install
 finish
 
 # 8.35. Libtool-2.4.6
 begin libtool-2.4.6 tar.xz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 rm -fv /usr/lib/libltdl.a
 finish
@@ -495,14 +495,14 @@ begin gdbm-1.20 tar.gz
 ./configure --prefix=/usr    \
             --disable-static \
             --enable-libgdbm-compat
-make
+make -j4
 make install
 finish
 
 # 8.37. Gperf-3.1
 begin gperf-3.1 tar.gz
 ./configure --prefix=/usr --docdir=/usr/share/doc/gperf-3.1
-make
+make -j4
 make install
 finish
 
@@ -511,7 +511,7 @@ begin expat-2.4.1 tar.xz
 ./configure --prefix=/usr    \
             --disable-static \
             --docdir=/usr/share/doc/expat-2.4.1
-make
+make -j4
 make install
 finish
 
@@ -527,7 +527,7 @@ begin inetutils-2.1 tar.xz
             --disable-rlogin     \
             --disable-rsh        \
             --disable-servers
-make
+make -j4
 make install
 mv -v /usr/{,s}bin/ifconfig
 finish
@@ -535,7 +535,7 @@ finish
 # 8.40. Less-590
 begin less-590 tar.gz
 ./configure --prefix=/usr --sysconfdir=/etc
-make
+make -j4
 make install
 finish
 
@@ -558,7 +558,7 @@ sh Configure -des                                         \
              -Dpager="/usr/bin/less -isR"                 \
              -Duseshrplib                                 \
              -Dusethreads
-make
+make -j4
 make install
 unset BUILD_ZLIB BUILD_BZIP2
 finish
@@ -566,7 +566,7 @@ finish
 # 8.42. XML::Parser-2.46
 begin XML-Parser-2.46 tar.gz
 perl Makefile.PL
-make
+make -j4
 make install
 finish
 
@@ -574,7 +574,7 @@ finish
 begin intltool-0.51.0 tar.gz
 sed -i 's:\\\${:\\\$\\{:' intltool-update.in
 ./configure --prefix=/usr
-make
+make -j4
 make install
 install -v -Dm644 doc/I18N-HOWTO /usr/share/doc/intltool-0.51.0/I18N-HOWTO
 finish
@@ -582,14 +582,14 @@ finish
 # 8.44. Autoconf-2.71
 begin autoconf-2.71 tar.xz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 finish
 
 # 8.45. Automake-1.16.4
 begin automake-1.16.4 tar.xz
 ./configure --prefix=/usr --docdir=/usr/share/doc/automake-1.16.4
-make
+make -j4
 make install
 finish
 
@@ -600,7 +600,7 @@ begin kmod-29 tar.xz
             --with-xz              \
             --with-zstd            \
             --with-zlib
-make
+make -j4
 make install
 for target in depmod insmod modinfo modprobe rmmod; do
   ln -sfv ../bin/kmod /usr/sbin/$target
@@ -613,7 +613,7 @@ begin elfutils-0.185 tar.bz2
 ./configure --prefix=/usr                \
             --disable-debuginfod         \
             --enable-libdebuginfod=dummy
-make
+make -j4
 make -C libelf install
 install -vm644 config/libelf.pc /usr/lib/pkgconfig
 rm /usr/lib/libelf.a
@@ -625,7 +625,7 @@ begin libffi-3.4.2 tar.gz
             --disable-static       \
             --with-gcc-arch=native \
             --disable-exec-static-tramp
-make
+make -j4
 make install
 finish
 
@@ -636,7 +636,7 @@ begin openssl-1.1.1l tar.gz
          --libdir=lib          \
          shared                \
          zlib-dynamic
-make
+make -j4
 sed -i '/INSTALL_LIBS/s/libcrypto.a libssl.a//' Makefile
 make MANSUFFIX=ssl install
 mv -v /usr/share/doc/openssl /usr/share/doc/openssl-1.1.1l
@@ -651,7 +651,7 @@ begin Python-3.9.6 tar.xz
             --with-system-ffi    \
             --with-ensurepip=yes \
             --enable-optimizations
-make
+make -j4
 make install
 install -v -dm755 /usr/share/doc/python-3.9.6/html 
 tar --strip-components=1  \
@@ -691,7 +691,7 @@ autoreconf -fiv
 FORCE_UNSAFE_CONFIGURE=1 ./configure \
             --prefix=/usr            \
             --enable-no-install-program=kill,uptime
-make
+make -j4
 make install
 mv -v /usr/bin/chroot /usr/sbin
 mv -v /usr/share/man/man1/chroot.1 /usr/share/man/man8/chroot.8
@@ -701,14 +701,14 @@ finish
 # 8.54. Check-0.15.2
 begin check-0.15.2 tar.gz
 ./configure --prefix=/usr --disable-static
-make
+make -j4
 make docdir=/usr/share/doc/check-0.15.2 install
 finish
 
 # 8.55. Diffutils-3.8
 begin diffutils-3.8 tar.xz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 finish
 
@@ -716,7 +716,7 @@ finish
 begin gawk-5.1.0 tar.xz
 sed -i 's/extras//' Makefile.in
 ./configure --prefix=/usr
-make
+make -j4
 make install
 mkdir -v /usr/share/doc/gawk-5.1.0
 cp    -v doc/{awkforai.txt,*.{eps,pdf,jpg}} /usr/share/doc/gawk-5.1.0
@@ -725,7 +725,7 @@ finish
 # 8.57. Findutils-4.8.0
 begin findutils-4.8.0 tar.xz
 ./configure --prefix=/usr --localstatedir=/var/lib/locate
-make
+make -j4
 make install
 finish
 
@@ -742,7 +742,7 @@ begin grub-2.06 tar.xz
             --sysconfdir=/etc      \
             --disable-efiemu       \
             --disable-werror
-make
+make -j4
 make install
 mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions
 finish
@@ -750,7 +750,7 @@ finish
 # 8.60. Gzip-1.10
 begin gzip-1.10 tar.xz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 finish
 
@@ -759,7 +759,7 @@ begin iproute2-5.13.0 tar.xz
 sed -i /ARPD/d Makefile
 rm -fv man/man8/arpd.8
 sed -i 's/.m_ipt.o//' tc/Makefile
-make
+make -j4
 make SBINDIR=/usr/sbin install
 mkdir -v              /usr/share/doc/iproute2-5.13.0
 cp -v COPYING README* /usr/share/doc/iproute2-5.13.0
@@ -771,7 +771,7 @@ patch -Np1 -i ../kbd-2.4.0-backspace-1.patch
 sed -i '/RESIZECONS_PROGS=/s/yes/no/' configure
 sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
 ./configure --prefix=/usr --disable-vlock
-make
+make -j4
 make install
 mkdir -v            /usr/share/doc/kbd-2.4.0
 cp -R -v docs/doc/* /usr/share/doc/kbd-2.4.0
@@ -780,21 +780,21 @@ finish
 # 8.63. Libpipeline-1.5.3
 begin libpipeline-1.5.3 tar.gz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 finish
 
 # 8.64. Make-4.3
 begin make-4.3 tar.gz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 finish
 
 # 8.65. Patch-2.7.6
 begin patch-2.7.6 tar.xz
 ./configure --prefix=/usr
-make
+make -j4
 make install
 finish
 
@@ -802,7 +802,7 @@ finish
 begin tar-1.34 tar.xz
 FORCE_UNSAFE_CONFIGURE=1  \
 ./configure --prefix=/usr
-make
+make -j4
 make install
 make -C doc install-html docdir=/usr/share/doc/tar-1.34
 finish
@@ -812,7 +812,7 @@ begin texinfo-6.8 tar.xz
 ./configure --prefix=/usr
 sed -e 's/__attribute_nonnull__/__nonnull/' \
     -i gnulib/lib/malloc/dynarray-skeleton.c
-make
+make -j4
 make install
 make TEXMF=/usr/share/texmf install-tex
 pushd /usr/share/info
@@ -827,7 +827,7 @@ finish
 begin vim-8.2.3337 tar.gz
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr
-make
+make -j4
 make install
 ln -sv vim /usr/bin/vi
 for L in  /usr/share/man/{,*/}man1/vim.1; do
@@ -853,23 +853,71 @@ endif
 EOF
 finish
 
-# 8.69. Eudev-3.2.10
-begin eudev-3.2.10 tar.gz
-./configure --prefix=/usr           \
-            --bindir=/usr/sbin      \
-            --sysconfdir=/etc       \
-            --enable-manpages       \
-            --disable-static
-make
-mkdir -pv /usr/lib/udev/rules.d
-mkdir -pv /etc/udev/rules.d
-make install
-tar -xvf ../udev-lfs-20171102.tar.xz
-make -f udev-lfs-20171102/Makefile.lfs install
-udevadm hwdb --update
+# 8.69. MarkupSafe-2.0.1
+begin MarkupSafe-2.0.1 tar.gz
+python3 setup.py build
+python3 setup.py install --optimize=1
 finish
 
-# 8.70. Man-DB-2.9.4
+# 8.70. Jinja2-3.0.1
+begin Jinja2-3.0.1 tar.gz
+python3 setup.py install --optimize=1
+finish
+
+# 8.71. Systemd-249
+begin systemd-249 tar.gz
+patch -Np1 -i ../systemd-249-upstream_fixes-1.patch
+sed -i -e 's/GROUP="render"/GROUP="video"/' \
+        -e 's/GROUP="sgx", //' rules.d/50-udev-default.rules.in
+mkdir -p build
+cd       build
+
+LANG=pt_BR.UTF-8                    \
+meson --prefix=/usr                 \
+      --sysconfdir=/etc             \
+      --localstatedir=/var          \
+      --buildtype=release           \
+      -Dblkid=true                  \
+      -Ddefault-dnssec=no           \
+      -Dfirstboot=false             \
+      -Dinstall-tests=false         \
+      -Dldconfig=false              \
+      -Dsysusers=false              \
+      -Db_lto=false                 \
+      -Drpmmacrosdir=no             \
+      -Dhomed=false                 \
+      -Duserdb=false                \
+      -Dman=false                   \
+      -Dmode=release                \
+      -Ddocdir=/usr/share/doc/systemd-249 \
+      ..
+LANG=pt_BR.UTF-8 ninja
+LANG=pt_BR.UTF-8 ninja install
+tar -xf ../../systemd-man-pages-249.tar.xz --strip-components=1 -C /usr/share/man
+rm -rf /usr/lib/pam.d
+systemd-machine-id-setup
+systemctl preset-all
+systemctl disable systemd-time-wait-sync.service
+finish
+
+# 8.72. dbus-1.12.20
+begin dbus-1.12.20 tar.gz
+./configure --prefix=/usr                        \
+            --sysconfdir=/etc                    \
+            --localstatedir=/var                 \
+            --disable-static                     \
+            --disable-doxygen-docs               \
+            --disable-xml-docs                   \
+            --docdir=/usr/share/doc/dbus-1.12.20 \
+            --with-console-auth-dir=/run/console \
+            --with-system-pid-file=/run/dbus/pid \
+            --with-system-socket=/run/dbus/system_bus_socket
+make -j4
+make install
+ln -sfv /etc/machine-id /var/lib/dbus
+finish
+
+# 8.73. Man-DB-2.9.4
 begin man-db-2.9.4 tar.xz
 ./configure --prefix=/usr                        \
             --docdir=/usr/share/doc/man-db-2.9.4 \
@@ -878,25 +926,24 @@ begin man-db-2.9.4 tar.xz
             --enable-cache-owner=bin             \
             --with-browser=/usr/bin/lynx         \
             --with-vgrind=/usr/bin/vgrind        \
-            --with-grap=/usr/bin/grap            \
-            --with-systemdtmpfilesdir=           \
-            --with-systemdsystemunitdir=
-make
+            --with-grap=/usr/bin/grap
+make -j4
 make install
 finish
 
-# 8.71. Procps-ng-3.3.17
+# 8.74. Procps-ng-3.3.17
 mv procps-ng-3.3.17.tar.xz procps-3.3.17.tar.xz
 begin procps-3.3.17 tar.xz
 ./configure --prefix=/usr                            \
             --docdir=/usr/share/doc/procps-ng-3.3.17 \
             --disable-static                         \
-            --disable-kill
-make
+            --disable-kill                           \
+			--with-systemd
+make -j4
 make install
 finish
 
-# 8.72. Util-linux-2.37.2
+# 8.75. Util-linux-2.37.2
 begin util-linux-2.37.2 tar.xz
 ./configure ADJTIME_PATH=/var/lib/hwclock/adjtime   \
             --libdir=/usr/lib    \
@@ -910,14 +957,12 @@ begin util-linux-2.37.2 tar.xz
             --disable-pylibmount \
             --disable-static     \
             --without-python     \
-            --without-systemd    \
-            --without-systemdsystemunitdir \
             runstatedir=/run
 make
 make install
 finish
 
-# 8.73. E2fsprogs-1.46.4
+# 8.76. E2fsprogs-1.46.4
 begin e2fsprogs-1.46.4 tar.gz
 mkdir -v build
 cd       build
@@ -928,7 +973,7 @@ cd       build
              --disable-libuuid       \
              --disable-uuidd         \
              --disable-fsck
-make
+make -j4
 make install
 rm -fv /usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
 gunzip -v /usr/share/info/libext2fs.info.gz
@@ -936,34 +981,6 @@ install-info --dir-file=/usr/share/info/dir /usr/share/info/libext2fs.info
 makeinfo -o      doc/com_err.info ../lib/et/com_err.texinfo
 install -v -m644 doc/com_err.info /usr/share/info
 install-info --dir-file=/usr/share/info/dir /usr/share/info/com_err.info
-finish
-
-# 8.74. Sysklogd-1.5.1
-begin sysklogd-1.5.1 tar.gz
-sed -i '/Error loading kernel symbols/{n;n;d}' ksym_mod.c
-sed -i 's/union wait/int/' syslogd.c
-make
-make BINDIR=/sbin install
-cat > /etc/syslog.conf << "EOF"
-# Begin /etc/syslog.conf
-
-auth,authpriv.* -/var/log/auth.log
-*.*;auth,authpriv.none -/var/log/sys.log
-daemon.* -/var/log/daemon.log
-kern.* -/var/log/kern.log
-mail.* -/var/log/mail.log
-user.* -/var/log/user.log
-*.emerg *
-
-# End /etc/syslog.conf
-EOF
-finish
-
-# 8.75. Sysvinit-2.99
-begin sysvinit-2.99 tar.xz
-patch -Np1 -i ../sysvinit-2.99-consolidated-1.patch
-make
-make install
 finish
 
 # 8.77. Stripping

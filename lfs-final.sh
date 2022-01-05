@@ -29,27 +29,29 @@ cd /sources
 find /usr/lib /usr/libexec -name \*.la -delete
 find /usr -depth -name $(uname -m)-lfs-linux-gnu\* | xargs rm -rf
 
-# 9.2. LFS-Bootscripts-20210608
-begin lfs-bootscripts-20210608 tar.xz
-make install
-finish
+# 9.2. Network Configuration
+echo [NETWORK] Making Static Configuration
+cat > /etc/systemd/network/10-eth-static.network << "EOF"
+[Match]
+Name=enp2s0
 
-# 9.4.1.2. Creating Custom Udev Rules
-bash /usr/lib/udev/init-net-rules.sh
+[Network]
+Address=192.168.0.2/24
+Gateway=192.168.0.1
+EOF
+echo [NETWORK] Making DHCP Configuration
+cat > /etc/systemd/network/10-eth-dhcp.network << "EOF"
+[Match]
+Name=enp2s0
 
-# 9.5.1. Creating Network Interface Configuration Files
-cd /etc/sysconfig/
-cat > ifconfig.eth0 << "EOF"
-ONBOOT=yes
-IFACE=eth0
-SERVICE=ipv4-static
-IP=192.168.1.2
-GATEWAY=192.168.1.1
-PREFIX=24
-BROADCAST=192.168.1.255
+[Network]
+DHCP=ipv4
+
+[DHCP]
+UseDomains=true
 EOF
 
-# 9.5.2. Creating the /etc/resolv.conf File
+# 9.2.2. Creating the /etc/resolv.conf File
 cat > /etc/resolv.conf << "EOF"
 # Begin /etc/resolv.conf
 
@@ -59,10 +61,10 @@ nameserver 8.8.4.4
 # End /etc/resolv.conf
 EOF
 
-# 9.5.3. Configuring the system hostname
+# 9.2.3. Configuring the system hostname
 echo "lfs" > /etc/hostname
 
-# 9.5.4. Customizing the /etc/hosts File
+# 9.2.4. Customizing the /etc/hosts File
 cat > /etc/hosts << "EOF"
 # Begin /etc/hosts
 
@@ -74,54 +76,25 @@ ff02::2   ip6-allrouters
 # End /etc/hosts
 EOF
 
-# 9.6.2. Configuring Sysvinit
-cat > /etc/inittab << "EOF"
-# Begin /etc/inittab
+# 9.5. Configuring the System Clock
+# Not needed for UTC
 
-id:3:initdefault:
+# cat > /etc/adjtime << "EOF"
+# 0.0 0 0.0
+# 0
+# LOCAL
+# EOF
 
-si::sysinit:/etc/rc.d/init.d/rc S
-
-l0:0:wait:/etc/rc.d/init.d/rc 0
-l1:S1:wait:/etc/rc.d/init.d/rc 1
-l2:2:wait:/etc/rc.d/init.d/rc 2
-l3:3:wait:/etc/rc.d/init.d/rc 3
-l4:4:wait:/etc/rc.d/init.d/rc 4
-l5:5:wait:/etc/rc.d/init.d/rc 5
-l6:6:wait:/etc/rc.d/init.d/rc 6
-
-ca:12345:ctrlaltdel:/sbin/shutdown -t1 -a -r now
-
-su:S016:once:/sbin/sulogin
-
-1:2345:respawn:/sbin/agetty --noclear tty1 9600
-2:2345:respawn:/sbin/agetty tty2 9600
-3:2345:respawn:/sbin/agetty tty3 9600
-4:2345:respawn:/sbin/agetty tty4 9600
-5:2345:respawn:/sbin/agetty tty5 9600
-6:2345:respawn:/sbin/agetty tty6 9600
-
-# End /etc/inittab
-EOF
-
-# 9.6.4. Configuring the System Clock
-cat > /etc/sysconfig/clock << "EOF"
-# Begin /etc/sysconfig/clock
-
-UTC=1
-
-# Set this to any options you might need to give to hwclock,
-# such as machine hardware clock type for Alphas.
-CLOCKPARAMS=
-
-# End /etc/sysconfig/clock
+# 9.6. Configuring the Linux Console
+cat > /etc/vconsole.conf << "EOF"
+KEYMAP=br-abnt2
 EOF
 
 # 9.7. The Bash Shell Startup Files
 cat > /etc/profile << "EOF"
 # Begin /etc/profile
 
-export LANG=en_US.UTF-8
+export LANG=pt_BR.UTF-8
 
 # End /etc/profile
 EOF
@@ -203,9 +176,9 @@ cd /sources
 # 10.3. Linux-5.13.12
 begin linux-5.13.12 tar.xz
 make mrproper
-make defconfig
-make
-make modules_install
+make -j4 defconfig
+make -j4
+make -j4 modules_install
 cp -iv arch/x86/boot/bzImage /boot/vmlinuz-5.13.12-lfs-11.0
 cp -iv System.map /boot/System.map-5.13.12
 cp -iv .config /boot/config-5.13.12
@@ -225,31 +198,31 @@ install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
 EOF
 
 # 10.4. Using GRUB to Set Up the Boot Process
-grub-install /dev/sdb
-cat > /boot/grub/grub.cfg << "EOF"
+# grub-install /dev/sdb
+# cat > /boot/grub/grub.cfg << "EOF"
 # Begin /boot/grub/grub.cfg
-set default=0
-set timeout=5
-insmod ext2
-set root=(hd0,1)
-menuentry "GNU/Linux, Linux 5.13.12-lfs-11.0" {
-        linux   /boot/vmlinuz-5.13.12-lfs-11.0 root=/dev/sda1 ro
-}
-EOF
+# set default=0
+# set timeout=5
+# insmod ext2
+# set root=(hd0,1)
+# menuentry "GNU/Linux, Linux 5.13.12-lfs-11.0" {
+#        linux   /boot/vmlinuz-5.13.12-lfs-11.0 root=/dev/sda1 ro
+# }
+# EOF
 
 # 11.1. The End
-echo 11.0 > /etc/lfs-release
+echo 11.0-systemd > /etc/lfs-release
 cat > /etc/lsb-release << "EOF"
 DISTRIB_ID="Linux From Scratch"
-DISTRIB_RELEASE="11.0"
+DISTRIB_RELEASE="11.0-systemd"
 DISTRIB_CODENAME="Linux From Scratch"
 DISTRIB_DESCRIPTION="Linux From Scratch"
 EOF
 cat > /etc/os-release << "EOF"
 NAME="Linux From Scratch"
-VERSION="11.0"
+VERSION="11.0-systemd"
 ID=lfs
-PRETTY_NAME="Linux From Scratch 11.0"
+PRETTY_NAME="Linux From Scratch 11.0-systemd"
 VERSION_CODENAME="Linux From Scratch"
 EOF
 

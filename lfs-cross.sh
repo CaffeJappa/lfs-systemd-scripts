@@ -35,7 +35,7 @@ cd       build
              --target=$LFS_TGT   \
              --disable-nls       \
              --disable-werror
-make
+make -j4
 make install -j1
 finish
 
@@ -75,7 +75,7 @@ cd       build
     --disable-libvtv                               \
     --disable-libstdcxx                            \
     --enable-languages=c,c++
-make
+make -j4
 make install
 cd ..
 cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
@@ -84,8 +84,8 @@ finish
 
 # 5.4. Linux-5.13.12 API Headers
 begin linux-5.13.12 tar.xz
-make mrproper
-make headers
+make -j4 mrproper
+make -j4 headers
 find usr/include -name '.*' -delete
 rm usr/include/Makefile
 cp -rv usr/include $LFS/usr
@@ -111,7 +111,7 @@ echo "rootsbindir=/usr/sbin" > configparms
       --enable-kernel=3.2                \
       --with-headers=$LFS/usr/include    \
       libc_cv_slibdir=/usr/lib
-make
+make -j4
 make DESTDIR=$LFS install
 sed '/RTLDLIST=/s@/usr@@g' -i $LFS/usr/bin/ldd
 echo 'int main(){}' > dummy.c
@@ -133,7 +133,7 @@ cd       build
     --disable-nls                   \
     --disable-libstdcxx-pch         \
     --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/11.2.0
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -142,7 +142,7 @@ begin m4-1.4.19 tar.xz
 ./configure --prefix=/usr   \
             --host=$LFS_TGT \
             --build=$(build-aux/config.guess)
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -152,8 +152,8 @@ sed -i s/mawk// configure
 mkdir build
 pushd build
   ../configure
-  make -C include
-  make -C progs tic
+  make -j4 -C include
+  make -j4 -C progs tic
 popd
 ./configure --prefix=/usr                \
             --host=$LFS_TGT              \
@@ -165,7 +165,7 @@ popd
             --without-ada                \
             --without-normal             \
             --enable-widec
-make
+make -j4
 make DESTDIR=$LFS TIC_PATH=$(pwd)/build/progs/tic install
 echo "INPUT(-lncursesw)" > $LFS/usr/lib/libncurses.so
 finish
@@ -176,7 +176,7 @@ begin bash-5.1.8 tar.gz
             --build=$(support/config.guess) \
             --host=$LFS_TGT                 \
             --without-bash-malloc
-make
+make -j4
 make DESTDIR=$LFS install
 ln -sv bash $LFS/bin/sh
 finish
@@ -188,7 +188,7 @@ begin coreutils-8.32 tar.xz
             --build=$(build-aux/config.guess) \
             --enable-install-program=hostname \
             --enable-no-install-program=kill,uptime
-make
+make -j4
 make DESTDIR=$LFS install
 mv -v $LFS/usr/bin/chroot                                     $LFS/usr/sbin
 mkdir -pv $LFS/usr/share/man/man8
@@ -199,7 +199,7 @@ finish
 # 6.6. Diffutils-3.8
 begin diffutils-3.8 tar.xz
 ./configure --prefix=/usr --host=$LFS_TGT
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -211,10 +211,10 @@ pushd build
                --disable-libseccomp \
                --disable-xzlib      \
                --disable-zlib
-  make
+  make -j4
 popd
 ./configure --prefix=/usr --host=$LFS_TGT --build=$(./config.guess)
-make FILE_COMPILE=$(pwd)/build/src/file
+make -j4 FILE_COMPILE=$(pwd)/build/src/file
 make DESTDIR=$LFS install
 finish
 
@@ -224,7 +224,7 @@ begin findutils-4.8.0 tar.xz
             --localstatedir=/var/lib/locate \
             --host=$LFS_TGT                 \
             --build=$(build-aux/config.guess)
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -234,7 +234,7 @@ sed -i 's/extras//' Makefile.in
 ./configure --prefix=/usr   \
             --host=$LFS_TGT \
             --build=$(./config.guess)
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -242,14 +242,14 @@ finish
 begin grep-3.7 tar.xz
 ./configure --prefix=/usr   \
             --host=$LFS_TGT
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
 # 6.11. Gzip-1.10
 begin gzip-1.10 tar.xz
 ./configure --prefix=/usr --host=$LFS_TGT
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -259,7 +259,7 @@ begin make-4.3 tar.gz
             --without-guile \
             --host=$LFS_TGT \
             --build=$(build-aux/config.guess)
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -268,7 +268,7 @@ begin patch-2.7.6 tar.xz
 ./configure --prefix=/usr   \
             --host=$LFS_TGT \
             --build=$(build-aux/config.guess)
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -276,7 +276,7 @@ finish
 begin sed-4.8 tar.xz
 ./configure --prefix=/usr   \
             --host=$LFS_TGT
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -285,7 +285,7 @@ begin tar-1.34 tar.xz
 ./configure --prefix=/usr                     \
             --host=$LFS_TGT                   \
             --build=$(build-aux/config.guess)
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -296,7 +296,7 @@ begin xz-5.2.5 tar.xz
             --build=$(build-aux/config.guess) \
             --disable-static                  \
             --docdir=/usr/share/doc/xz-5.2.5
-make
+make -j4
 make DESTDIR=$LFS install
 finish
 
@@ -312,7 +312,7 @@ cd       build
     --enable-shared            \
     --disable-werror           \
     --enable-64-bit-bfd
-make
+make -j4
 make DESTDIR=$LFS install -j1
 install -vm755 libctf/.libs/libctf.so.0.0.0 $LFS/usr/lib
 finish
@@ -351,7 +351,7 @@ ln -s ../../../libgcc/gthr-posix.h $LFS_TGT/libgcc/gthr-default.h
     --disable-libvtv                               \
     --disable-libstdcxx                            \
     --enable-languages=c,c++
-make
+make -j4
 make DESTDIR=$LFS install
 ln -sv gcc $LFS/usr/bin/cc
 finish

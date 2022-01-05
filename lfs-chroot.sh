@@ -38,14 +38,14 @@ cd       build
     --disable-nls                    \
     --host=$(uname -m)-lfs-linux-gnu \
     --disable-libstdcxx-pch
-make
+make -j4
 make install
 finish
 
 # 7.8. Gettext-0.21
 begin gettext-0.21 tar.xz
 ./configure --disable-shared
-make
+make -j4
 cp -v gettext-tools/src/{msgfmt,msgmerge,xgettext} /usr/bin
 finish
 
@@ -53,7 +53,7 @@ finish
 begin bison-3.7.6 tar.xz
 ./configure --prefix=/usr \
             --docdir=/usr/share/doc/bison-3.7.6
-make
+make -j4
 make install
 finish
 
@@ -68,7 +68,7 @@ sh Configure -des                                        \
              -Dsitearch=/usr/lib/perl5/5.34/site_perl    \
              -Dvendorlib=/usr/lib/perl5/5.34/vendor_perl \
              -Dvendorarch=/usr/lib/perl5/5.34/vendor_perl
-make
+make -j4
 make install
 finish
 
@@ -77,7 +77,7 @@ begin Python-3.9.6 tar.xz
 ./configure --prefix=/usr   \
             --enable-shared \
             --without-ensurepip
-make
+make -j4
 make install
 finish
 
@@ -86,7 +86,7 @@ begin texinfo-6.8 tar.xz
 sed -e 's/__attribute_nonnull__/__nonnull/' \
     -i gnulib/lib/malloc/dynarray-skeleton.c
 ./configure --prefix=/usr
-make
+make -j4
 make install
 finish
 
@@ -106,6 +106,6 @@ mkdir -pv /var/lib/hwclock
             --disable-static     \
             --without-python     \
             runstatedir=/run
-make
+make -j4
 make install
 finish
