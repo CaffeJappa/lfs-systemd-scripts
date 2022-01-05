@@ -1,5 +1,5 @@
 # LFS-Systemd-Scripts
-Instructions and scripts to build Linux From Scratch (LFS), version 11.0-systemd, as simple as possible.
+Instructions and scripts to build Linux From Scratch (LFS), version 11.0-systemd, as simply as possible.
 
 # Foreword
 
