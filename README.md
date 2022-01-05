@@ -304,7 +304,7 @@ $ exit
 #                                                              order
 
 /dev/sda1      /            vfat     rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro            0     2
-/dev/sda2      /            ext4     defaults            1     1     
+/dev/sda2      /boot            ext4     defaults            1     1     
 proc           /proc        proc     nosuid,noexec,nodev 0     0
 sysfs          /sys         sysfs    nosuid,noexec,nodev 0     0
 devpts         /dev/pts     devpts   gid=5,mode=620      0     0
