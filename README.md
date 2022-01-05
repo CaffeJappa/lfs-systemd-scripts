@@ -242,7 +242,7 @@ EOF
 
 # exec /bin/bash --login +h
 ```
-
+* Now you have a name! ;)
 > 1.4. Run the `lfs-chroot.sh` script, which will build additional temporary tools.
 ``` 
 # sh /lfs-chroot.sh | tee /lfs-chroot.log
@@ -278,7 +278,6 @@ PS1='(lfs chroot) \u:\w\$ '        \
 PATH=/usr/bin:/usr/sbin            \
 /bin/bash --login
 ```
-* Now you have a name! ;)
 ## The End
 
 > 1.0. Run the final script to configure the rest of the system.
