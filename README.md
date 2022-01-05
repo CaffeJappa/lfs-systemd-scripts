@@ -7,7 +7,7 @@ This guide does not replace reading the whole LFS book. It is highly recommended
 
 This build was made to be accomplished inside a virtual machine, but you can use any tool (or real HD/SSD) of your personal preference. Feel free to use your GNU/Linux distribution of choice, just be sure to install the development packages available.
 
-The packages needed to build LFS can be downloaded from [here](http://ftp.osuosl.org/pub/lfs/lfs-packages/lfs-packages-11.0.tar) (443 MB), other mirrors are available [here](http://linuxfromscratch.org/lfs/download.html) (look for the "LFS HTTP/FTP Sites" section at the bottom, the file you'll need is `lfs-packages-11.0.tar`).
+The packages needed to build LFS can be downloaded from [here](http://ftp.osuosl.org/pub/lfs/lfs-packages/lfs-packages-11.0.tar) (443 MB), other mirrors are available [here](http://linuxfromscratch.org/lfs/download.html) (look for the "LFS HTTP/FTP Sites" section at the bottom, the file you'll need is `lfs-packages-11.0.tar`). If you are going to use GRUB EFI, download these packages too: [Unifont](https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz), [efivar](https://github.com/rhboot/efivar/releases/download/37/efivar-37.tar.bz2), [efibootmgr](https://github.com/rhboot/efibootmgr/archive/17/efibootmgr-17.tar.gz) and [popt](http://ftp.rpm.org/popt/releases/popt-1.x/popt-1.18.tar.gz)
 
 All compilations in the scripts made by a ``make`` are configured to use parallelism 4 (``-j4``), if you need to change this, edit the scripts.
 
@@ -50,6 +50,14 @@ export LFS=/mnt/lfs
 # mv 11.0 sources/
 # chmod -v a+wt $LFS/sources
 ```
+> 1.0.1. If you've downloaded GRUB EFI packages, copy them into your `$LFS/sources` folder.
+```
+# cp /<location_of_unifont>/unifont-13.0.06.pcf.gz $LFS/sources/
+# cp /<location_of_unifont>/efivar-37.tar.bz2 $LFS/sources/
+# cp /<location_of_unifont>/efibootmgr-17.tar.gz $LFS/sources/
+# cp /<location_of_unifont>/popt-1.18.tar.gz $LFS/sources/
+```
+* Não extraia os arquivos!
 
 > 1.1. Copy all the shell scripts from this repository to your `$LFS` directory.
 ```
