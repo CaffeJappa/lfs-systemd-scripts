@@ -24,7 +24,7 @@ All compilations in the scripts made by a ``make`` are configured to use paralle
   Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-30842846, default 30842846):
   Command (m for help): w
 ```
-* If you are gonna install with EFI, first create a new partition with `n`, type in `Last Sector: +512M`, type `t` after creating it and then type `1`. Then follow the instructions up there
+* If you are gonna install with EFI, first create a new partition with `n`, type in Last Sector `+512M`, type `t` after creating it and then type `1`. Then follow the instructions up there
 
 > 1.1. Create a filesystem, a mount point, and mount it.
 ```
