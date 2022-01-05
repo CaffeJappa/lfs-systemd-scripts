@@ -22,8 +22,9 @@ All compilations in the scripts made by a ``make`` are configured to use paralle
   Partition number (1-128, default 1): 
   First sector (2048-30842846, default 2048): 
   Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-30842846, default 30842846):
+  Command (m for help): w
 ```
-* UEFI Installation coming soon!
+* If you are gonna install with EFI, first create a new partition with `n`, type in `Last Sector: +512M`, type `t` after creating it and then type `1`. Then follow the instructions up there
 
 > 1.1. Create a filesystem, a mount point, and mount it.
 ```
@@ -31,7 +32,7 @@ All compilations in the scripts made by a ``make`` are configured to use paralle
 # mkdir /mnt/lfs
 # mount /dev/sda1 /mnt/lfs
 ```
-
+* EFI: `mkfs.fat -F32 /dev/sda2`, `mkdir -p /mnt/lfs/boot/efi`, `mount /dev/sda2 /mnt/lfs/efi`
 > 1.2. Add the following line to the root `.bashrc`.
 ```
 export LFS=/mnt/lfs
@@ -50,7 +51,7 @@ export LFS=/mnt/lfs
 # mv 11.0 sources/
 # chmod -v a+wt $LFS/sources
 ```
-> 1.0.1. If you've downloaded GRUB EFI packages, copy them into your `$LFS/sources` folder.
+> 1.0.1. If you've downloaded GRUB EFI packages, extract them into your `$LFS/sources` folder.
 ```
 # cp /<location_of_GRUB-EFI>/GRUB-EFI.tar .
 # mkdir $LFS/sources-grub/
@@ -281,10 +282,15 @@ $ exit
 ## The End
 
 > 1.0. Run the final script to configure the rest of the system.
+* GRUB is not configured to be installed in the script. If you're a MBR user, edit the file and uncomment the GRUB (10.4 header) lines (and configure it to your partitions). You don't need to do this if doing on a real HD/SSD, just open your terminal (of the host system) and run `# grub-mkconfig -o /boot/grub/grub.cfg`.
 
 ```
 # sh /lfs-final.sh | tee /lfs-final.log
 ```
-* GRUB is not configured to be installed in the script. If you're a MBR user, edit the file and uncomment the GRUB (10.4 header) lines (and configure it to your partitions), you don't need to do this if doing on a real HD/SSD, just open your terminal and run `# grub-mkconfig -o /boot/grub/grub.cfg`. A UEFI Grub script will be released soon.
+
+> 1.0.1. GRUB EFI script
+```
+# sh /lfs-grub-uefi.sh | tee /lfs-grub-uefi.log
+```
 
 Congratulations, you did it! Now you may use the system for whatever you want. It will be bootable (if you configured it to be so) and fully functional. Enjoy!
