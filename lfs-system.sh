@@ -879,8 +879,10 @@ meson --prefix=/usr                 \
       --buildtype=release           \
       -Dblkid=true                  \
       -Ddefault-dnssec=no           \
+      -Dfirstboot=false		    \
       -Dinstall-tests=false         \
       -Dldconfig=false              \
+      -Dsysusers		    \
       -Db_lto=false                 \
       -Drpmmacrosdir=no             \
       -Dhomed=false                 \
@@ -896,7 +898,6 @@ rm -rf /usr/lib/pam.d
 systemd-machine-id-setup
 systemctl preset-all
 systemctl disable systemd-time-wait-sync.service
-systemd-sysusers
 finish
 
 # 8.72. dbus-1.12.20
