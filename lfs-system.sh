@@ -882,7 +882,7 @@ meson --prefix=/usr                 \
       -Dfirstboot=false		    \
       -Dinstall-tests=false         \
       -Dldconfig=false              \
-      -Dsysusers		    \
+      -Dsysusers=false		    \
       -Db_lto=false                 \
       -Drpmmacrosdir=no             \
       -Dhomed=false                 \
