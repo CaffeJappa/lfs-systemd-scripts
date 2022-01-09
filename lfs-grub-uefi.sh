@@ -24,6 +24,7 @@ finish() {
 	rm -rf $package_name
 }
 
+mkdir /sources-grub
 cp /sources/grub-2.06.tar.xz /sources-grub
 cd /sources-grub
 
@@ -39,7 +40,7 @@ finish
 
 begin efivar-37 tar.bz2
 patch -Np1 -i ../efivar-37-gcc_9-1.patch
-make -j4
+make -j4 CFLAGS="-O2 -Wno-stringop-truncation"
 make install LIBDIR=/usr/lib
 finish
 
