@@ -32,7 +32,7 @@ All compilations in the scripts made by a ``make`` are configured to use paralle
 # mkdir /mnt/lfs
 # mount /dev/sda1 /mnt/lfs
 ```
-* EFI: `mkfs.fat -F32 /dev/sda2`, `mkdir -p /mnt/lfs/boot/efi`, `mount /dev/sda2 /mnt/lfs/efi`
+* EFI: `mkfs.fat -F32 /dev/sda2`, `mkdir -p /mnt/lfs/boot/efi`, `mount /dev/sda2 /mnt/lfs/boot/efi`
 > 1.2. Add the following line to the root `.bashrc`.
 ```
 export LFS=/mnt/lfs
